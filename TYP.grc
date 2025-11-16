@@ -61,7 +61,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '30720000'
+    value: '2000000'
   states:
     bus_sink: false
     bus_source: false
@@ -76,7 +76,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: C:\Users\louis\GNURadio\Complex.bin
+    file: C:\Users\louis\radioconda\GNURadio\IQ.bin
     type: complex
     unbuffered: 'False'
     vlen: '1'
@@ -158,7 +158,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: Graph
+    name: '""'
     nconnections: '1'
     norm_window: 'False'
     showports: 'False'
@@ -179,14 +179,14 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_HAMMING
+    wintype: window.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 424.0]
+    coordinate: [416, 432.0]
     rotation: 0
     state: enabled
 - name: soapy_bladerf_source_0
@@ -214,8 +214,8 @@ blocks:
 
 connections:
 - [blocks_throttle2_0, '0', blocks_file_sink_0, '0']
+- [blocks_throttle2_0, '0', qtgui_freq_sink_x_0, '0']
 - [soapy_bladerf_source_0, '0', blocks_throttle2_0, '0']
-- [soapy_bladerf_source_0, '0', qtgui_freq_sink_x_0, '0']
 
 metadata:
   file_format: 1

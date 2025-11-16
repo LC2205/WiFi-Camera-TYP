@@ -1,55 +1,79 @@
 import math as m
+from decimal import Decimal
 import statistics as s
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-import random
 
 class IQComplex():
 
-    def __init__(self, IFile, QFile):
-        self.IFile = IFile
-        self.QFile = QFile
+    def __init__(self, IQFile):
+        self.IQFile = IQFile
         self.IArr = []
-        self.QArr = []        
+        self.QArr = []       
 
     def calcIQ(self, IValArr, QValArr):
         IQArr = []
+        IQArrSquelch = []
         for IVal, QVal in zip(IValArr, QValArr):
-            IQArr.append(m.sqrt((float(IVal)**2 + float(QVal)**2)))
-        IQArr.sort()
-        plt.plot(IQArr, norm.pdf(IQArr, s.mean(IQArr), s.stdev(IQArr)))
-        #plt.plot(IQArr, norm.pdf(IQArr, s.mean(IQArr), s.stdev(IQArr)))
-        #plt.hist(IQArr, density=True)
+            IQ = m.sqrt((float(IVal)**2 + float(QVal)**2))
+            if IQ > m.sqrt(2)/2.0:
+                IQArrSquelch.append(IQ)
+            IQArr.append(IQ)
+        print(len(IQArr))
+        print(len(IQArrSquelch))
+        plt.plot(IQArr, 'o')
+        plt.title("IQ Values unsorted")
         plt.show()
-        return s.mean(IQArr)
+
+        plt.plot(IQArrSquelch, 'o')
+        plt.title("IQ Values unsorted SQUELCH 50%")
+        plt.show()
+
+        IQArrSquelch.sort()
+        IQArr.sort()
+        plt.subplot(1,2,1)
+        plt.plot(IQArr, norm.pdf(IQArr, s.mean(IQArr), s.stdev(IQArr)))
+        plt.hist(IQArr, bins=len(IQArr)//20000, density=True, color='r')
+        plt.title("Normal IQ (Mean)")
+        plt.xlabel("IQ value")
+        plt.ylabel("Probability Density function")
+        
+        plt.subplot(1,2,2)
+        plt.plot(IQArr, norm.pdf(IQArr, s.median(IQArr), s.stdev(IQArr)))
+        plt.hist(IQArr, bins=len(IQArr)//20000, density=True, color='r')
+        plt.title("Normal IQ (Median)")
+        plt.xlabel("IQ value")
+        plt.ylabel("Probability Density function")
+
+        plt.show()
+
+        plt.subplot(1,2,1)
+        plt.plot(IQArrSquelch, norm.pdf(IQArrSquelch, s.mean(IQArrSquelch), s.stdev(IQArrSquelch)))
+        plt.hist(IQArrSquelch, bins=len(IQArrSquelch)//1000, density=True, color='r')
+        plt.title("Normal IQ Squelch (Mean)")
+        plt.xlabel("IQ value")
+        plt.ylabel("Probability Density function")
+
+        plt.subplot(1,2,2)
+        plt.plot(IQArrSquelch, norm.pdf(IQArrSquelch, s.median(IQArrSquelch), s.stdev(IQArrSquelch)))
+        plt.hist(IQArrSquelch, bins=len(IQArrSquelch)//1000, density=True, color='r')
+        plt.title("Normal IQ Squelch (Median)")
+        plt.xlabel("IQ value")
+        plt.ylabel("Probability Density function")
+
+        plt.show()
+        return [s.mean(IQArr), s.median(IQArr), s.mean(IQArrSquelch), s.median(IQArrSquelch)]
 
     def readIQ(self, filename):
-        randomindex = random.sample(range(0,100000), 10000)
-        for x in range(len(randomindex)):
-            randomindex[x] = (randomindex[x] // 2) * 2
         tempIArr = []
         tempQArr = []
-        with open(self.QFile, "rb") as f:
+        with open(self.IQFile, "rb") as f:
             lines = np.fromfile(f, dtype=np.float32)
-            for i in randomindex:
+            for i in range(0, len(lines), 2):
                 tempIArr.append(lines[i])
                 tempQArr.append(lines[i+1])
         return [tempIArr, tempQArr]
-            #for qVal in lines:
-            #    QArr.append(qVal / 32768)
-            
-
-    def readI(self, filename):
-        tempIArr = []
-        with open(self.IFile, "rb") as f:
-            lines = np.fromfile(f, dtype=np.int16)
-            for i in range(1000):
-                print(lines[i])
-                tempIArr.append(lines[i]/32768)
-        return tempIArr
-            #for iVal in lines:
-            #    IArr.append(iVal / 32768)
 
     def plotGraph(self):
             plt.subplot(1,2,1)
@@ -63,16 +87,14 @@ class IQComplex():
             plt.show()
 
     def initiateCalc(self):
-        IQArr = self.readIQ(self.QFile)
+        IQArr = self.readIQ(self.IQFile)
         self.IArr = IQArr[0]
         self.QArr = IQArr[1]
-        #self.IArr = self.readI(self.IFile)
-        #self.QArr = self.readQ(self.QFile)
         self.plotGraph()
         return self.calcIQ(self.IArr, self.QArr)
     
 def main():
-    IQ = IQComplex("Real.bin", "Complex.bin")
+    IQ = IQComplex("IQ.bin")
     result = IQ.initiateCalc()
     print(result)
 
