@@ -61,12 +61,43 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '2000000'
+    value: '10000000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [192, 8.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_real_0
+  id: blocks_complex_to_real
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 144.0]
+    rotation: 0
+    state: enabled
+- name: blocks_conjugate_cc_0
+  id: blocks_conjugate_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 232.0]
     rotation: 0
     state: enabled
 - name: blocks_file_sink_0
@@ -76,36 +107,110 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: C:\Users\louis\radioconda\GNURadio\IQ.bin
-    type: complex
+    file: TYP.bin
+    type: float
     unbuffered: 'False'
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 192.0]
+    coordinate: [576, 504.0]
     rotation: 0
     state: enabled
-- name: blocks_throttle2_0
-  id: blocks_throttle2
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    ignoretag: 'True'
-    limit: auto
-    maximum: '0.1'
+    length: '50000'
+    max_iter: '4000'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate
+    scale: '20'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 112.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
     type: complex
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 200.0]
+    coordinate: [376, 128.0]
+    rotation: 0
+    state: enabled
+- name: blocks_nlog10_ff_0
+  id: blocks_nlog10_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '10'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [888, 136.0]
+    rotation: 0
+    state: enabled
+- name: blocks_null_source_0
+  id: blocks_null_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_source: '[[0,],]'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '1'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 392.0]
+    rotation: 0
+    state: enabled
+- name: network_udp_sink_0
+  id: network_udp_sink
+  parameters:
+    addr: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: ''
+    header: '0'
+    payloadsize: '1472'
+    port: '5000'
+    send_eof: 'True'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 352.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -166,7 +271,7 @@ blocks:
     tr_level: '0.0'
     tr_mode: qtgui.TRIG_MODE_FREE
     tr_tag: '""'
-    type: complex
+    type: float
     units: dB
     update_time: '0.10'
     width1: '1'
@@ -180,13 +285,163 @@ blocks:
     width8: '1'
     width9: '1'
     wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '10'
+    ymax: '30'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 432.0]
+    coordinate: [848, 264.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_histogram_sink_x_0
+  id: qtgui_histogram_sink_x
+  parameters:
+    accum: 'False'
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    bins: '27'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '2048'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '100'
+    xmin: '-100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 328.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'False'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '100'
+    min: '-100'
+    name: '""'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 256.0]
     rotation: 0
     state: enabled
 - name: soapy_bladerf_source_0
@@ -199,7 +454,7 @@ blocks:
     comment: ''
     dev_args: ''
     freq_correction: '0'
-    gain: '20.0'
+    gain: '10.0'
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
@@ -208,14 +463,22 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 200.0]
+    coordinate: [160, 112.0]
     rotation: 0
     state: enabled
 
 connections:
-- [blocks_throttle2_0, '0', blocks_file_sink_0, '0']
-- [blocks_throttle2_0, '0', qtgui_freq_sink_x_0, '0']
-- [soapy_bladerf_source_0, '0', blocks_throttle2_0, '0']
+- [blocks_complex_to_real_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_conjugate_cc_0, '0', blocks_multiply_xx_0, '1']
+- [blocks_moving_average_xx_0, '0', blocks_nlog10_ff_0, '0']
+- [blocks_multiply_xx_0, '0', blocks_complex_to_real_0, '0']
+- [blocks_nlog10_ff_0, '0', blocks_file_sink_0, '0']
+- [blocks_nlog10_ff_0, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_nlog10_ff_0, '0', qtgui_histogram_sink_x_0, '0']
+- [blocks_nlog10_ff_0, '0', qtgui_number_sink_0, '0']
+- [blocks_null_source_0, '0', network_udp_sink_0, '0']
+- [soapy_bladerf_source_0, '0', blocks_conjugate_cc_0, '0']
+- [soapy_bladerf_source_0, '0', blocks_multiply_xx_0, '0']
 
 metadata:
   file_format: 1
