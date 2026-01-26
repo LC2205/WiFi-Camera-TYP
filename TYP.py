@@ -203,13 +203,10 @@ class TYP(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.network_udp_sink_0 = network.udp_sink(gr.sizeof_float, 1, '127.0.0.1', 5000, 0, 1472, True)
-        self.blocks_null_source_0 = blocks.null_source(gr.sizeof_float*1)
+        self.network_udp_sink_0 = network.udp_sink(gr.sizeof_float, 1, '127.0.0.1', 5000, 0, 1024, True)
         self.blocks_nlog10_ff_0 = blocks.nlog10_ff(10, 1, 0)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
         self.blocks_moving_average_xx_0 = blocks.moving_average_ff(50000, 20, 4000, 1)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_float*1, 'TYP.bin', False)
-        self.blocks_file_sink_0.set_unbuffered(False)
         self.blocks_conjugate_cc_0 = blocks.conjugate_cc()
         self.blocks_complex_to_real_0 = blocks.complex_to_real(1)
 
@@ -221,11 +218,10 @@ class TYP(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_conjugate_cc_0, 0), (self.blocks_multiply_xx_0, 1))
         self.connect((self.blocks_moving_average_xx_0, 0), (self.blocks_nlog10_ff_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_complex_to_real_0, 0))
-        self.connect((self.blocks_nlog10_ff_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.blocks_nlog10_ff_0, 0), (self.network_udp_sink_0, 0))
         self.connect((self.blocks_nlog10_ff_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_nlog10_ff_0, 0), (self.qtgui_histogram_sink_x_0, 0))
         self.connect((self.blocks_nlog10_ff_0, 0), (self.qtgui_number_sink_0, 0))
-        self.connect((self.blocks_null_source_0, 0), (self.network_udp_sink_0, 0))
         self.connect((self.soapy_bladerf_source_0, 0), (self.blocks_conjugate_cc_0, 0))
         self.connect((self.soapy_bladerf_source_0, 0), (self.blocks_multiply_xx_0, 0))
 
@@ -285,14 +281,10 @@ def main(top_block_cls=TYP, options=None):
     signal.signal(signal.SIGTERM, sig_handler)
 
     timer = Qt.QTimer()
-    timer.setSingleShot(True)
-    timer.timeout.connect(qapp.quit)
-    timer.start(1000)
+    timer.start(500)
+    timer.timeout.connect(lambda: None)
 
     qapp.exec_()
-
-    tb.stop()
-    tb.wait()
 
 if __name__ == '__main__':
     main()

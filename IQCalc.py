@@ -62,7 +62,15 @@ class IQComplex():
     def readFile(self, filename):
         try:
             with open(filename, "rb") as f:
-                return (s.mean(np.fromfile(f, np.float32)) / 100)
+                lines = np.fromfile(f, dtype=np.float32)
+                plt.plot(lines, norm.pdf(lines, s.mean(lines), s.stdev(lines)))
+                plt.hist(lines, bins=50, density=True, color='r')
+                plt.show()
+                squelch = []
+                #for line in lines:
+                #    
+                #        squelch.append(line)
+                return (s.mean(lines) / 100)
         except:
             print("File not found")
             return 0
@@ -84,6 +92,7 @@ def main():
     print(datetime.time(datetime.now()))
     #result = IQ.initiateCalc()
     avg = IQ.readFile("TYP.bin")
+    print(avg)
     colours = rgb(avg)
 
     plt.imshow([[colours]])
