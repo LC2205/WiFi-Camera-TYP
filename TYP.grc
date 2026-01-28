@@ -69,6 +69,39 @@ blocks:
     coordinate: [192, 8.0]
     rotation: 0
     state: enabled
+- name: blocks_abs_xx_0
+  id: blocks_abs_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 480.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 480.0]
+    rotation: 0
+    state: enabled
 - name: blocks_complex_to_real_0
   id: blocks_complex_to_real
   parameters:
@@ -84,7 +117,7 @@ blocks:
     bus_structure: null
     coordinate: [504, 144.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_conjugate_cc_0
   id: blocks_conjugate_cc
   parameters:
@@ -99,7 +132,7 @@ blocks:
     bus_structure: null
     coordinate: [232, 232.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_moving_average_xx_0
   id: blocks_moving_average_xx
   parameters:
@@ -119,7 +152,7 @@ blocks:
     bus_structure: null
     coordinate: [704, 112.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_xx_0
   id: blocks_multiply_xx
   parameters:
@@ -137,7 +170,7 @@ blocks:
     bus_structure: null
     coordinate: [376, 128.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_nlog10_ff_0
   id: blocks_nlog10_ff
   parameters:
@@ -155,25 +188,23 @@ blocks:
     bus_structure: null
     coordinate: [888, 136.0]
     rotation: 0
-    state: enabled
-- name: network_udp_sink_0
-  id: network_udp_sink
+    state: disabled
+- name: blocks_nlog10_ff_1
+  id: blocks_nlog10_ff
   parameters:
-    addr: 127.0.0.1
     affinity: ''
     alias: ''
     comment: ''
-    header: '0'
-    payloadsize: '1024'
-    port: '5000'
-    send_eof: 'True'
-    type: float
+    k: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '20'
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [440, 424.0]
+    coordinate: [552, 472.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -256,7 +287,7 @@ blocks:
     bus_structure: null
     coordinate: [848, 264.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_histogram_sink_x_0
   id: qtgui_histogram_sink_x
   parameters:
@@ -343,7 +374,7 @@ blocks:
     bus_structure: null
     coordinate: [688, 328.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_number_sink_0
   id: qtgui_number_sink
   parameters:
@@ -406,7 +437,7 @@ blocks:
     bus_structure: null
     coordinate: [552, 256.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: soapy_bladerf_source_0
   id: soapy_bladerf_source
   parameters:
@@ -428,19 +459,66 @@ blocks:
     bus_structure: null
     coordinate: [160, 112.0]
     rotation: 0
+    state: disabled
+- name: soapy_bladerf_source_1
+  id: soapy_bladerf_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: bandwidth
+    center_freq: centre_freq
+    comment: ''
+    dev_args: ''
+    freq_correction: '0'
+    gain: '10.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [120, 464.0]
+    rotation: 0
+    state: enabled
+- name: zeromq_pub_sink_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:5000
+    affinity: ''
+    alias: ''
+    bind: 'True'
+    comment: ''
+    drop_on_hwm: 'True'
+    hwm: '-1'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 440.0]
+    rotation: 0
     state: enabled
 
 connections:
+- [blocks_abs_xx_0, '0', zeromq_pub_sink_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', blocks_nlog10_ff_1, '0']
 - [blocks_complex_to_real_0, '0', blocks_moving_average_xx_0, '0']
 - [blocks_conjugate_cc_0, '0', blocks_multiply_xx_0, '1']
 - [blocks_moving_average_xx_0, '0', blocks_nlog10_ff_0, '0']
 - [blocks_multiply_xx_0, '0', blocks_complex_to_real_0, '0']
-- [blocks_nlog10_ff_0, '0', network_udp_sink_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_histogram_sink_x_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_number_sink_0, '0']
+- [blocks_nlog10_ff_1, '0', blocks_abs_xx_0, '0']
 - [soapy_bladerf_source_0, '0', blocks_conjugate_cc_0, '0']
 - [soapy_bladerf_source_0, '0', blocks_multiply_xx_0, '0']
+- [soapy_bladerf_source_1, '0', blocks_complex_to_mag_squared_0, '0']
 
 metadata:
   file_format: 1
