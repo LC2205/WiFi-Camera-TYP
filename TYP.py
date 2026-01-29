@@ -84,17 +84,17 @@ class TYP(gr.top_block, Qt.QWidget):
         self.soapy_bladerf_source_1.set_frequency(0, centre_freq)
         self.soapy_bladerf_source_1.set_frequency_correction(0, 0)
         self.soapy_bladerf_source_1.set_gain(0, min(max(10.0, -1.0), 60.0))
-        self.blocks_nlog10_ff_1 = blocks.nlog10_ff(20, 1, 0)
+        self.blocks_nlog10_ff_1 = blocks.nlog10_ff(10, 1, 0)
+        self.blocks_moving_average_xx_1 = blocks.moving_average_ff(100000, 0.000001, 100000, 1)
         self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
-        self.blocks_abs_xx_0 = blocks.abs_ff(1)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_abs_xx_0, 0), (self.zeromq_pub_sink_0, 0))
-        self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_nlog10_ff_1, 0))
-        self.connect((self.blocks_nlog10_ff_1, 0), (self.blocks_abs_xx_0, 0))
+        self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_moving_average_xx_1, 0))
+        self.connect((self.blocks_moving_average_xx_1, 0), (self.blocks_nlog10_ff_1, 0))
+        self.connect((self.blocks_nlog10_ff_1, 0), (self.zeromq_pub_sink_0, 0))
         self.connect((self.soapy_bladerf_source_1, 0), (self.blocks_complex_to_mag_squared_0, 0))
 
 

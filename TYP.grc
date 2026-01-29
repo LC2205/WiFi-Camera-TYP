@@ -69,23 +69,6 @@ blocks:
     coordinate: [192, 8.0]
     rotation: 0
     state: enabled
-- name: blocks_abs_xx_0
-  id: blocks_abs_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [720, 480.0]
-    rotation: 0
-    state: enabled
 - name: blocks_complex_to_mag_squared_0
   id: blocks_complex_to_mag_squared
   parameters:
@@ -99,7 +82,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 480.0]
+    coordinate: [328, 480.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_real_0
@@ -153,6 +136,26 @@ blocks:
     coordinate: [704, 112.0]
     rotation: 0
     state: disabled
+- name: blocks_moving_average_xx_1
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '100000'
+    max_iter: '100000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '0.000001'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 448.0]
+    rotation: 0
+    state: enabled
 - name: blocks_multiply_xx_0
   id: blocks_multiply_xx
   parameters:
@@ -198,13 +201,13 @@ blocks:
     k: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
-    n: '20'
+    n: '10'
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 472.0]
+    coordinate: [728, 472.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -479,7 +482,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [120, 464.0]
+    coordinate: [104, 464.0]
     rotation: 0
     state: enabled
 - name: zeromq_pub_sink_0
@@ -501,21 +504,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 440.0]
+    coordinate: [864, 440.0]
     rotation: 0
     state: enabled
 
 connections:
-- [blocks_abs_xx_0, '0', zeromq_pub_sink_0, '0']
-- [blocks_complex_to_mag_squared_0, '0', blocks_nlog10_ff_1, '0']
+- [blocks_complex_to_mag_squared_0, '0', blocks_moving_average_xx_1, '0']
 - [blocks_complex_to_real_0, '0', blocks_moving_average_xx_0, '0']
 - [blocks_conjugate_cc_0, '0', blocks_multiply_xx_0, '1']
 - [blocks_moving_average_xx_0, '0', blocks_nlog10_ff_0, '0']
+- [blocks_moving_average_xx_1, '0', blocks_nlog10_ff_1, '0']
 - [blocks_multiply_xx_0, '0', blocks_complex_to_real_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_histogram_sink_x_0, '0']
 - [blocks_nlog10_ff_0, '0', qtgui_number_sink_0, '0']
-- [blocks_nlog10_ff_1, '0', blocks_abs_xx_0, '0']
+- [blocks_nlog10_ff_1, '0', zeromq_pub_sink_0, '0']
 - [soapy_bladerf_source_0, '0', blocks_conjugate_cc_0, '0']
 - [soapy_bladerf_source_0, '0', blocks_multiply_xx_0, '0']
 - [soapy_bladerf_source_1, '0', blocks_complex_to_mag_squared_0, '0']

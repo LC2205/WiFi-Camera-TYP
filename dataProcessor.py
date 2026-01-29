@@ -38,10 +38,14 @@ def readData(conn, timing):
                 data = np.frombuffer(msg, dtype=np.float32, count=-1)
                 print(s.mean(data))
                 if first:
-                    img = setimg(rgb((100 - s.median(data)) / 100))
+                    val = ((s.median(data) + 10) + 60) / 60
+                    print("VAL:", val)
+                    img = setimg(rgb(val))
                     first = False
                 else:
-                    updateimg(rgb((100 - s.median(data)) / 100), img, timing)
+                    val = ((s.median(data) + 10) + 60) / 60
+                    print("VAL:", val)
+                    updateimg(rgb(val), img, timing)
         else:
             empty_sink = conn.recv()
 
