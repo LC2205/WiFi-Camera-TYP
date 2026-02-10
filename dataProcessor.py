@@ -4,6 +4,10 @@ import numpy as np
 import statistics as s
 import matplotlib.pyplot as plt
 import zmq
+import keyboard
+
+def getkey():
+    keyboard.read_key()
 
 def milli_timestamp():
     return time.monotonic() * 1000
@@ -49,14 +53,41 @@ def readData(conn, timing):
         else:
             empty_sink = conn.recv()
 
+def readSet(conn):
+    print("Reading started")
+    iters = 0
+    calibration = 60
+    while True:
+        if keyboard.is_pressed("c"):
+            msg = conn.recv()
+            data = np.frombuffer(msg, dtype=np.float32, count=-1)
+            calibration = s.mean(data)
+            print(f"Calibration set to {calibration}")
+            time.sleep(1)
+            print("ACTIVE")
+        elif keyboard.is_pressed("e"):
+            msg = conn.recv()
+            data = np.frombuffer(msg, dtype=np.float32, count=-1)
+            val = ((s.median(data) + 10) + calibration) / calibration
+            print(f"Value: {val}")
+            with open (f"Reading{iters}.txt", "w") as f:
+                f.write(val)
+            iters += 1
+            time.sleep(1)
+            print("ACTIVE")
+        elif keyboard.is_pressed("q"):
+            break
+        else:
+            empty_sink = conn.recv()
+
 def runStream():
     context = zmq.Context()
     socket = context.socket(zmq.SUB)
     socket.connect("tcp://127.0.0.1:5000")
     socket.setsockopt(zmq.SUBSCRIBE, b'')
 
-
-    readData(socket, 250)
+    readSet(socket)
+    #readData(socket, 250)
     return
 
 def main():
